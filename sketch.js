@@ -75,7 +75,7 @@ function malmal() {
 
   let previousKey = null;
   for (const key in points) {
-    strokeWeight(5);
+    strokeWeight(2);
     point(key, points[key]);
     strokeWeight(2);
     if (previousKey !== null) {
