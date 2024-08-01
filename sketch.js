@@ -91,7 +91,7 @@ function malmal() {
         strokeWeight(2);
         if (previousKey !== null) {
           if (
-            graphSelecter.selected() != "Tan" ||
+            graphSelecter.selected() != "Tangens" ||
             points[previousKey] > points[key]
           ) {
             line(previousKey, points[previousKey], key, points[key]);
@@ -132,10 +132,10 @@ function inputs() {
   freqSlider.position(width - 200, 80);
   graphSelecter = createSelect();
   graphSelecter.position(10, 10);
-  graphSelecter.option("Sin");
-  graphSelecter.option("Cos");
-  graphSelecter.option("Tan");
-  graphSelecter.selected("Sin");
+  graphSelecter.option("Sinus");
+  graphSelecter.option("Cosinus");
+  graphSelecter.option("Tangens");
+  graphSelecter.selected("Sinus");
   drawSelecter = createSelect();
   drawSelecter.position(10, 40);
   drawSelecter.option("Dotted");
@@ -187,19 +187,19 @@ function windowResized() {
 
 function changeToSelected() {
   switch (graphSelecter.selected()) {
-    case "Sin":
+    case "Sinus":
       //Custom Values for each graph here
       aStart = 90;
       reset();
       break;
 
-    case "Cos":
+    case "Cosinus":
       //Custom Values for each graph here
       aStart = 180;
       reset();
       break;
 
-    case "Tan":
+    case "Tangens":
       //Custom Values for each graph here
       aStart = 90;
       reset();
