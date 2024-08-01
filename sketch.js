@@ -19,8 +19,8 @@ let maxValue;
 function setup() {
   angleMode(DEGREES);
 
-  inputs();
-  reset();
+  startUp();
+  resetGraph();
   //noLoop();
 }
 
@@ -42,13 +42,17 @@ function draw() {
 
   graphSelecter.position(10, 10);
   drawSelecter.position(10, 40);
+  graphColorPicker.position(10, 70);
+  resetGraphColorPicker.position(70,73)
   if (debugCheckbox.checked()) {
     debug();
   }
 
+  checkButtons();
+
   a += freq;
   if (a >= len * 360 + aStart) {
-    reset();
+    resetGraph();
   }
 }
 
@@ -80,6 +84,7 @@ function malmal() {
   text("Amplitude: " + amp, width - 200, 70);
   text("Frequenz: " + freq, width - 200, 120);
 
+  stroke(graphColorPicker.value());
   let previousKey = null;
   for (var key in points) {
     switch (drawSelecter.selected()) {
@@ -119,46 +124,51 @@ function malmal() {
   line(p5.x, p5.y, p4.x, p4.y);
 }
 
-function inputs() {
+function startUp() {
   createCanvas(windowWidth, windowHeight - 1 / 3);
   p0 = createVector(150, height / 2);
   aStart = 90;
   amp = 1;
   freq = 1;
   len = ((windowWidth - amp * 50 - p0.x) * freq) / 360;
+  graphColor = color(0);
   ampSlider = createSlider(0.1, 2.5, 1, 0.1);
   ampSlider.position(width - 200, 30);
   freqSlider = createSlider(0.5, 20, 1, 0.5);
   freqSlider.position(width - 200, 80);
   graphSelecter = createSelect();
-  graphSelecter.position(10, 10);
   graphSelecter.option("Sinus");
   graphSelecter.option("Cosinus");
   graphSelecter.option("Tangens");
   graphSelecter.selected("Sinus");
   drawSelecter = createSelect();
-  drawSelecter.position(10, 40);
   drawSelecter.option("Dotted");
   drawSelecter.option("Connected");
   drawSelecter.option("Filled");
   drawSelecter.selected("Dotted");
   debugCheckbox = createCheckbox("Debug Mode");
   debugCheckbox.position(windowWidth - 120, windowHeight - 30);
+  graphColorPicker = createColorPicker(color(0,0,255));
+  resetGraphColorPicker = createButton("Reset");
+  resetAmp = createButton("Reset");
+  resetAmp.position(windowWidth - 60, 30);
+  resetFreq = createButton("Reset");
+  resetFreq.position(windowWidth - 60, 80);
 }
 
 function getUserInputs() {
   if (amp != ampSlider.value()) {
-    reset();
+    resetGraph();
     amp = ampSlider.value();
   }
   if (freq != freqSlider.value()) {
-    reset();
+    resetGraph();
     freq = freqSlider.value();
     len = ((windowWidth - amp * 50 - p0.x) * freq) / 360;
   }
 }
 
-function reset() {
+function resetGraph() {
   background(240);
   a = aStart;
   points = {};
@@ -167,6 +177,8 @@ function reset() {
 function debug() {
   graphSelecter.position(10, 100);
   drawSelecter.position(10, 130);
+  graphColorPicker.position(10, 160);
+  resetGraphColorPicker.position(70,163)
   strokeWeight(1);
   stroke(255, 0, 0);
   text("Angle: " + a, 10, 20);
@@ -174,7 +186,7 @@ function debug() {
   text("FPS: " + round(frameRate(), 0), 10, 60);
   text("Maus Y Pos: " + round(mouseY), 10, windowHeight - 10);
   text("Maus X Pos: " + round(mouseX), 10, windowWidth - 30);
-  text("len: " + len, 10, 80);
+  text("len: " + round(len,3), 10, 80);
 }
 
 function windowResized() {
@@ -188,21 +200,18 @@ function windowResized() {
 function changeToSelected() {
   switch (graphSelecter.selected()) {
     case "Sinus":
-      //Custom Values for each graph here
       aStart = 90;
-      reset();
+      resetGraph();
       break;
 
     case "Cosinus":
-      //Custom Values for each graph here
       aStart = 180;
-      reset();
+      resetGraph();
       break;
 
     case "Tangens":
-      //Custom Values for each graph here
       aStart = 90;
-      reset();
+      resetGraph();
       break;
 
     default:
@@ -215,30 +224,30 @@ function changeToSelected() {
 
 function graphCalculation() {
   switch (graphSelecter.selected()) {
-    case "Sin":
-      p4 = createVector(amp * 50, amp * 50 * cos(a)).add(p0); //Point on Verticalizer
+    case "Sinus":
+      p4 = createVector(amp * 50, amp * 50 * cos(a)).add(p0);
       p5 = createVector((a - aStart) / freq + amp * 50, amp * 50 * cos(a)).add(
         p0
-      ); //Point on Sin
+      );
       break;
 
-    case "Cos":
-      p4 = createVector(amp * 50, amp * 50 * cos(a)).add(p0); //Point on Verticalizer
+    case "Cosinus":
+      p4 = createVector(amp * 50, amp * 50 * cos(a)).add(p0);
       p5 = createVector((a - aStart) / freq + amp * 50, amp * 50 * cos(a)).add(
         p0
-      ); //Point on cos
+      );
       break;
 
-    case "Tan":
+    case "Tangens":
       let tanValue = tan(a - aStart);
       if (abs(tanValue) > maxValue) {
         tanValue = maxValue * Math.sign(tanValue);
       }
-      p4 = createVector(amp * 50, amp * 50 * -tan(a - aStart)).add(p0); //Point on Verticalizer
+      p4 = createVector(amp * 50, amp * 50 * -tan(a - aStart)).add(p0);
       p5 = createVector(
         (a - aStart) / freq + amp * 50,
         amp * 50 * -tan(a - aStart)
-      ).add(p0); //Point on Tan
+      ).add(p0);
       break;
 
     default:
@@ -247,4 +256,16 @@ function graphCalculation() {
       );
       break;
   }
+}
+
+function checkButtons() {
+  resetGraphColorPicker.mousePressed(() => {
+    graphColorPicker.value("#0000FF");
+  });
+  resetAmp.mousePressed(() => {
+    ampSlider.value(1);
+  });
+  resetFreq.mousePressed(() => {
+    freqSlider.value(1);
+  });
 }
