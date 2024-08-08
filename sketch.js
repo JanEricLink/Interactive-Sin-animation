@@ -43,7 +43,7 @@ function draw() {
   graphSelecter.position(10, 10);
   drawSelecter.position(10, 40);
   graphColorPicker.position(10, 70);
-  resetGraphColorPicker.position(70,73)
+  resetGraphColorPicker.position(70, 73);
   if (debugCheckbox.checked()) {
     debug();
   }
@@ -148,7 +148,7 @@ function startUp() {
   drawSelecter.selected("Dotted");
   debugCheckbox = createCheckbox("Debug Mode");
   debugCheckbox.position(windowWidth - 120, windowHeight - 30);
-  graphColorPicker = createColorPicker(color(0,0,255));
+  graphColorPicker = createColorPicker(color(0, 0, 255));
   resetGraphColorPicker = createButton("Reset");
   resetAmp = createButton("Reset");
   resetAmp.position(windowWidth - 60, 30);
@@ -178,7 +178,7 @@ function debug() {
   graphSelecter.position(10, 100);
   drawSelecter.position(10, 130);
   graphColorPicker.position(10, 160);
-  resetGraphColorPicker.position(70,163)
+  resetGraphColorPicker.position(70, 163);
   strokeWeight(1);
   stroke(255, 0, 0);
   text("Angle: " + a, 10, 20);
@@ -186,13 +186,15 @@ function debug() {
   text("FPS: " + round(frameRate(), 0), 10, 60);
   text("Maus Y Pos: " + round(mouseY), 10, windowHeight - 10);
   text("Maus X Pos: " + round(mouseX), 10, windowWidth - 30);
-  text("len: " + round(len,3), 10, 80);
+  text("len: " + round(len, 3), 10, 80);
 }
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
   ampSlider.position(windowWidth - 200, 30);
   freqSlider.position(windowWidth - 200, 80);
+  resetAmp.position(windowWidth - 60, 30);
+  resetFreq.position(windowWidth - 60, 80);
   len = ((windowWidth - amp * 50 - p0.x) * freq) / 360;
   debugCheckbox.position(windowWidth - 120, windowHeight - 30);
 }
